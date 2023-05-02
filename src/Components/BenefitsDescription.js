@@ -1,23 +1,21 @@
 export default function BenefitsDescription(){
     return (
 <div class="row text-center p-3">
+      <h1 class="mb-4">What we have to offer</h1>
       <div class="col-lg-4 container ">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-        <h2 class="fw-normal">Heading</h2>
-        <p>Some representative placeholder content for the three columns of text below the carousel. This is the first column.</p>
-        <p><a class="btn btn-secondary" href="#">View details »</a></p>
+        <img src="images/free.png" alt="Free" class="mb-3" width="140" height="140"/>
+        <h2 class="fw-normal mb-3">Free access</h2>
+        <p>You get full access to all website features for free.</p>
       </div>
       <div class="col-lg-4">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-        <h2 class="fw-normal">Heading</h2>
-        <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
-        <p><a class="btn btn-secondary" href="#">View details »</a></p>
+        <img src="images/training-course.png" alt="Free" class="mb-3" width="140" height="140"/>
+        <h2 class="fw-normal mb-3">Plan your training</h2>
+        <p>You can plan and follow your training.</p>
       </div>
       <div class="col-lg-4">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
-        <h2 class="fw-normal">Heading</h2>
-        <p>And lastly this, the third column of representative placeholder content.</p>
-        <p><a class="btn btn-secondary" href="#">View details »</a></p>
+        <img src="images/diet.png" alt="Free" class="mb-3" width="140" height="140"/>
+        <h2 class="fw-normal mb-3">Plan your diet</h2>
+        <p>Now you can also follow your diet acording to your stats including BMI.</p>
       </div>
     </div>
 

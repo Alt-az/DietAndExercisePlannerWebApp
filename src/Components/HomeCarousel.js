@@ -1,6 +1,6 @@
 export default function HomeCarousel(){
     return (
-<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+<div id="myCarousel" class="carousel slide text-dark" data-bs-ride="carousel">
             <div class="carousel-indicators">
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
@@ -8,9 +8,9 @@ export default function HomeCarousel(){
             </div>
             <div class="carousel-inner">
             <div class="carousel-item">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+                <img src="images/exercise3.jpg" alt="Los Angeles" class="d-block w-100"  height="600"/>
                 <div class="container">
-                <div class="carousel-caption text-start">
+                <div class="carousel-caption text-start text-dark">
                     <h1>Example headline.</h1>
                     <p>Some representative placeholder content for the first slide of the carousel.</p>
                     <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
@@ -18,9 +18,9 @@ export default function HomeCarousel(){
                 </div>
             </div>
             <div class="carousel-item">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+                <img src="images/exercise2.jpg" alt="Los Angeles" class="d-block w-100"  height="600"/>
                 <div class="container">
-                <div class="carousel-caption">
+                <div class="carousel-caption text-dark">
                     <h1>Another example headline.</h1>
                     <p>Some representative placeholder content for the second slide of the carousel.</p>
                     <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
@@ -28,9 +28,9 @@ export default function HomeCarousel(){
                 </div>
             </div>
             <div class="carousel-item active">
-                <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+                <img src="images/exercise1.jpg" alt="Los Angeles" class="d-block w-100"  height="600"/>
                 <div class="container">
-                <div class="carousel-caption text-end">
+                <div class="carousel-caption text-end text-dark">
                     <h1>One more for good measure.</h1>
                     <p>Some representative placeholder content for the third slide of this carousel.</p>
                     <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
