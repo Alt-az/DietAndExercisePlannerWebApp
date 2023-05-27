@@ -1,7 +1,16 @@
 import {
   Link
 } from "react-router-dom";
+import { useContext, useState } from "react";
+import {logContext, idContext} from '../App';
+import ProfileLogo from "./ProfileLogo";
 export default function Navbar() {
+  const {log,setLog} = useContext(logContext);
+  const logButtons =  () => {
+    return (log==='unlogged')?
+    <><button type="button" class="btn btn-outline-light me-2"><Link to="/login" class="text-decoration-none text-white">Login</Link></button><button type="button" class="btn btn-warning"><Link to="/register" class="text-decoration-none text-dark">Sign-up</Link></button></>:
+    <ProfileLogo/>
+  }
   return (
     <header class="p-3 text-bg-dark">
     <div class="container">
@@ -19,8 +28,7 @@ export default function Navbar() {
 
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2"><Link to="/login" class="text-decoration-none text-white">Login</Link></button>
-          <button type="button" class="btn btn-warning"><Link to="/register" class="text-decoration-none text-dark">Sign-up</Link></button>
+            {logButtons()}
         </div>
       </div>
     </div>

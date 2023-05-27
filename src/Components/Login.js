@@ -1,5 +1,25 @@
 
+import {logContext, idContext} from '../App';
+import { useContext, useState } from "react";
+import "../services/client.service";
+import ClientDataService from '../services/client.service';
 export default function Login(){
+  const {log,setLog} = useContext(logContext);
+  const {id,setId} = useContext(idContext);
+  const [email,setEmail] = useState();
+  const [password,setPassword] = useState();
+  const [p,setP] = useState('unlogged');
+  const getData = async () => {
+    return (await ClientDataService.findByEmail(email)).data;
+  }
+  const logIn = async (e) => {
+    e.preventDefault();
+    if(ClientDataService.findByEmail(email)!=null){
+      const response = await getData();
+      setId(response[0].id);
+      setLog('logged');
+    }
+  }
     return (
         <div>
             <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSignin">
@@ -10,13 +30,13 @@ export default function Login(){
       </div>
 
       <div class="modal-body p-5 pt-0">
-        <form class="">
+        <form class="" onSubmit={logIn}>
           <div class="form-floating mb-3">
-            <input type="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com"/>
+            <input type="email" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com" value={email} onChange={(e) => {setEmail(e.target.value)}}/>
             <label for="floatingInput">Email address</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password"/>
+            <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
             <label for="floatingPassword">Password</label>
           </div>
           <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Sign up</button>

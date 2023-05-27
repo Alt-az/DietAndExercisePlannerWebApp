@@ -10,12 +10,15 @@ import {
 import { useState,createContext } from "react";
 
 export const logContext = createContext();
+export const idContext = createContext();
 function App() {
-  const [log, setLog] = useState("unlogged");
+  const [log, setLog] = useState('unlogged');
+  const [id, setId] = useState('');
   return (
     <div className="App">
       <BrowserRouter>
-      <logContext.Provider value={{log,setLog}}>
+        <idContext.Provider value={{id,setId}}>
+        <logContext.Provider value={{log,setLog}}>
         <Navbar/>
         <Routes>
           <Route path="/" element={<Home/>}/>
@@ -24,6 +27,8 @@ function App() {
         </Routes>
         <Footer/>
         </logContext.Provider>
+        </idContext.Provider>
+        
       </BrowserRouter>
     </div>
   );

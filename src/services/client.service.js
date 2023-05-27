@@ -1,9 +1,6 @@
 import http from "../http-common";
 
-export default class ClientDataService {
-  getAll() {
-    return http.get("/clients");
-  }
+class ClientDataService {
 
   get(id) {
     return http.get(`/clients/${id}`);
@@ -25,7 +22,8 @@ export default class ClientDataService {
     return http.delete(`/clients`);
   }
 
-  findByLogin(login) {
-    return http.get(`/clients?login=${login}`);
+  findByEmail(email) {
+    return http.get(`/clients?email=${email}`);
   }
 }
+export default new ClientDataService();
