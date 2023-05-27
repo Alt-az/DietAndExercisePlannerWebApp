@@ -8,6 +8,10 @@ import {
   BrowserRouter, Route, Routes, Link
 } from "react-router-dom";
 import { useState,createContext } from "react";
+import DietPage from './Components/DietPage';
+import ExcercisePage from './Components/ExercisePage';
+import Statistics from './Components/Statistics';
+import Settings from './Components/Settings';
 
 export const logContext = createContext();
 export const idContext = createContext();
@@ -24,6 +28,10 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/settings" element={<Settings/>}/>
+          <Route path="/diet" element={<DietPage/>}/>
+          <Route path="/exercise" element={<ExcercisePage/>}/>
+          <Route path="/stats" element={<Statistics/>}/>
         </Routes>
         <Footer/>
         </logContext.Provider>
