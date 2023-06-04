@@ -14,10 +14,15 @@ export default function Login(){
   }
   const logIn = async (e) => {
     e.preventDefault();
+    try{
     if(ClientDataService.findByEmail(email)!=null){
       const response = await getData();
       setId(response[0].id);
       setLog('logged');
+    }
+    }finally{
+      setEmail('');
+      setPassword('');
     }
   }
     return (
@@ -39,8 +44,8 @@ export default function Login(){
             <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password" value={password} onChange={(e) => {setPassword(e.target.value)}}/>
             <label for="floatingPassword">Password</label>
           </div>
-          <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Sign up</button>
-          <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
+          <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Login</button>
+          <small class="text-body-secondary">By clicking Login, you agree to the terms of use.</small>
           <hr class="my-4"/>
         </form>
       </div>

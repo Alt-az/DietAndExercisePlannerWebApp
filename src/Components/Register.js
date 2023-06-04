@@ -7,10 +7,18 @@ export default function Register(e){
 
     const register = (e) => {
         e.preventDefault()
-        ClientDataService.create({
-            email: email,
-            password: password
-        });
+        try{
+        if(password===rePassword){
+            ClientDataService.create({
+                email: email,
+                password: password
+            });
+        }
+        }finally{
+            setEmail("");
+            setPassword("");
+            setRePassword("");
+        }
     }
     return (
         <div>
