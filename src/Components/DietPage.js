@@ -27,7 +27,7 @@ export default function DietPage(){
         });
         setMeals(input);
     };
-    
+
     useEffect(()=>{
         initMeals();
     },[]);
@@ -68,18 +68,19 @@ export default function DietPage(){
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const api = await ApiDataService.getFood(inputs.weight,inputs.name);
-        const apiResult = api.data;
-        console.log(apiResult[0].calories);
-        meals.push({
-            name: inputs.name,
-            calories: apiResult[0].calories,
-            weight: inputs.weight,
-            weekday: inputs.weekday,
-            hour: inputs.hour,
-            minute: inputs.minute
-          });
-          setValue(!value);
+        if(inputs.minute<=60 && inputs.hour<=24 && inputs.minute>=0 && inputs.hour>=0){
+            const api = await ApiDataService.getFood(inputs.weight,inputs.name);
+            const apiResult = api.data;
+            meals.push({
+                name: inputs.name,
+                calories: apiResult[0].calories,
+                weight: inputs.weight,
+                weekday: inputs.weekday,
+                hour: inputs.hour,
+                minute: inputs.minute
+            });
+            setValue(!value);
+        }
     }
     const handleChange = (event) => {
         const name = event.target.name;
@@ -94,7 +95,7 @@ export default function DietPage(){
                     if(meal.weekday===day){
                         return (<div className="bg-info rounded-4 border border-danger mb-2 row">
                             <div className="col-9">
-                                <p className="fw-bold">{meal.hour}:{meal.minute}<br/>name:{meal.name}<br/>calories:{meal.calories}<br/>weight:{meal.weight}</p>
+                                <p className="fw-bold">{meal.hour}:{meal.minute}<br/>name:{meal.name}<br/>calories:{meal.calories}cal<br/>weight:{meal.weight}g</p>
                             </div>
                             <div className="col-1 p-2 pr-2">
                                 <button  onClick={() => {
@@ -135,12 +136,14 @@ export default function DietPage(){
                             <input type="name" class="form-control" id="nm" placeholder="Enter name" name="name" value={inputs.name} onChange={handleChange}/>
                         </div>
                         <div class="mb-3">
-                            <label for="weight" class="form-label">Weight:</label>
+                            <label for="weight" class="form-label">Weight (grams):</label>
                             <input type="weight" class="form-control" id="wgt" placeholder="Enter weight" name="weight" value={inputs.weight} onChange={handleChange}/>
                         </div>
                         <div class="mb-3">
                             <label for="weekday" class="form-label">Weekday:</label>
-                            <input type="weekday" class="form-control" id="wd" placeholder="Enter weekday" name="weekday" value={inputs.weekday} onChange={handleChange}/>
+                            <select class="form-select form form-control" name="weekday" value={inputs.weekday} onChange={handleChange}>
+                                {weeks.map((day)=>{return <option>{day}</option>})}
+                            </select>
                         </div>
                         <div class="mb-3 row">
                             <div className="col">
@@ -159,12 +162,12 @@ export default function DietPage(){
                     {week.map((day)=> showWeeks(day))}
                 </div>
                 <div className="container-fluid row">
-                    <div className="col-8"></div>
-                    <div className="col-1">
-                        <button onClick={handleLoad} class="btn btn-primary m-2 p-2">Load</button>
+                    <div className="col-7"></div>
+                    <div className="col-2">
+                        <button onClick={handleLoad} class="btn btn-primary m-2">Load last saved plan</button>
                     </div>
-                    <div className="col-3">
-                        <button onClick={handleSend} class="btn btn-primary m-2 p-2">Save</button>
+                    <div className="col-1">
+                        <button onClick={handleSend} class="btn btn-primary m-2">Save plan</button>
                     </div>
                     
                 </div>
