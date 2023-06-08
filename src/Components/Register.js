@@ -1,10 +1,12 @@
 import ClientDataService from '../services/client.service';
 import { useState,createContext } from "react";
+import {Link} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 export default function Register(e){
     const [email,setEmail] = useState();
     const [password,setPassword] = useState();
     const [rePassword,setRePassword] = useState();
-
+    const navigate = useNavigate();
     const register = (e) => {
         e.preventDefault()
         try{
@@ -18,6 +20,7 @@ export default function Register(e){
             setEmail("");
             setPassword("");
             setRePassword("");
+            navigate('/');
         }
     }
     return (

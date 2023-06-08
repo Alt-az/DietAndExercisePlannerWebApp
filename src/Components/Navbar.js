@@ -1,6 +1,4 @@
-import {
-  Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { useContext, useState } from "react";
 import {logContext, idContext} from '../App';
 import ProfileLogo from "./ProfileLogo";

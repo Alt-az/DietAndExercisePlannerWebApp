@@ -3,12 +3,14 @@ import {logContext, idContext} from '../App';
 import { useContext, useState } from "react";
 import "../services/client.service";
 import ClientDataService from '../services/client.service';
+import { useNavigate } from 'react-router-dom';
 export default function Login(){
   const {log,setLog} = useContext(logContext);
   const {id,setId} = useContext(idContext);
   const [email,setEmail] = useState();
   const [password,setPassword] = useState();
   const [p,setP] = useState('unlogged');
+  const navigate = useNavigate();
   const getData = async () => {
     return (await ClientDataService.findByEmail(email)).data;
   }
@@ -23,6 +25,7 @@ export default function Login(){
     }finally{
       setEmail('');
       setPassword('');
+      navigate('/')
     }
   }
     return (

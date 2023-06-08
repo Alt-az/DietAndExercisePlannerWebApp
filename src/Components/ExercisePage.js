@@ -1,7 +1,8 @@
 import "./ExercisePage.css"
-import { useState,useContext} from "react";
+import { useState,useContext,useEffect} from "react";
 import ClientDataService from '../services/client.service';
 import {logContext, idContext} from '../App';
+import ApiDataService from '../services/api.service';
 export default function ExercisesPage(){
     const weeks = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
     const [week,setWeek] = useState(weeks);
@@ -9,6 +10,28 @@ export default function ExercisesPage(){
     const [exercises, setExercises] = useState([]);
     const [value,setValue] = useState([true]);
     const {id,setId} = useContext(idContext);
+
+    const initExercises = async () => {
+        const result = await ClientDataService.getExercises(id);
+        const resultdata = result.data;
+        const input = [];
+        resultdata.map((res) =>{
+            input.push({
+                name: res.name,
+                muscle: res.muscle,
+                difficulty: res.difficulty,
+                weekday: res.weekday,
+                hour: res.hour,
+                minute: res.minute
+            });
+        });
+        setExercises(input);
+    };
+
+    useEffect(()=>{
+        initExercises();
+    },[]);
+    
     const handleSend = (event) => {
         event.preventDefault();
         ClientDataService.deleteExercises(id);
@@ -46,10 +69,13 @@ export default function ExercisesPage(){
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const api = await ApiDataService.getExercise(inputs.weight,inputs.muscle);
+        const apiResult = api.data;
+        console.log(apiResult[0].calories);
         exercises.push({
-            name: inputs.name,
-            muscle: inputs.muscle,
-            difficulty: inputs.difficulty,
+            name: apiResult[0].name,
+            muscle: apiResult[0].muscle,
+            difficulty: apiResult[0].difficulty,
             weekday: inputs.weekday,
             hour: inputs.hour,
             minute: inputs.minute
@@ -105,12 +131,8 @@ export default function ExercisesPage(){
                     <div className="container p-5">
                     <h2>Add product</h2>
                     <form onSubmit={handleSubmit}>
-                        <div class="mb-3 mt-3">
-                            <label for="name" class="form-label">Name:</label>
-                            <input type="name" class="form-control" id="nm" placeholder="Enter name" name="name" value={inputs.name} onChange={handleChange}/>
-                        </div>
                         <div class="mb-3">
-                            <label for="muscle" class="form-label">muscle:</label>
+                            <label for="muscle" class="form-label">Muscle:</label>
                             <input type="muscle" class="form-control" id="clr" placeholder="Enter muscle" name="muscle" value={inputs.muscle} onChange={handleChange}/>
                         </div>
                         <div class="mb-3">

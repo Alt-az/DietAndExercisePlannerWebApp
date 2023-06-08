@@ -1,15 +1,38 @@
 import "./DietPage.css"
 import ApiDataService from '../services/api.service'
-import { useState,useContext} from "react";
+import { useState,useContext,useEffect} from "react";
 import ClientDataService from '../services/client.service';
 import {logContext, idContext} from '../App';
 export default function DietPage(){
     const weeks = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
     const [week,setWeek] = useState(weeks);
     const [inputs, setInputs] = useState({});
-    const [meals, setMeals] = useState([]);
+    
     const [value,setValue] = useState([true]);
     const {id,setId} = useContext(idContext);
+    const [meals, setMeals] = useState([]);
+    const initMeals = async () => {
+        const result = await ClientDataService.getFood(id);
+        const resultdata = result.data;
+        const input = [];
+        resultdata.map((res) =>{
+            input.push({
+                name: res.name,
+                calories: res.calories,
+                weight: res.weight,
+                weekday: res.weekday,
+                hour: res.hour,
+                minute: res.minute
+            });
+        });
+        setMeals(input);
+    };
+    
+    useEffect(()=>{
+        initMeals();
+    },[]);
+    
+
     const handleSend = (event) => {
         event.preventDefault();
         ClientDataService.deleteFood(id);
@@ -45,7 +68,7 @@ export default function DietPage(){
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const api = await ApiDataService.get(inputs.weight,inputs.name);
+        const api = await ApiDataService.getFood(inputs.weight,inputs.name);
         const apiResult = api.data;
         console.log(apiResult[0].calories);
         meals.push({
@@ -63,6 +86,7 @@ export default function DietPage(){
         const value = event.target.value;
         setInputs(values => ({...values, [name]: value}))
       }
+    
     const mealShow = (day) => {
         return (
             <div>
@@ -96,6 +120,7 @@ export default function DietPage(){
         {mealShow(day)}
     </div>);
     }
+    
     return (
         <div>
             <h1 className="container">Diet Plan</h1>
@@ -109,10 +134,6 @@ export default function DietPage(){
                             <label for="name" class="form-label">Name:</label>
                             <input type="name" class="form-control" id="nm" placeholder="Enter name" name="name" value={inputs.name} onChange={handleChange}/>
                         </div>
-                        {/* <div class="mb-3">
-                            <label for="calories" class="form-label">Calories:</label>
-                            <input type="calories" class="form-control" id="clr" placeholder="Enter calories" name="calories" value={inputs.calories} onChange={handleChange}/>
-                        </div> */}
                         <div class="mb-3">
                             <label for="weight" class="form-label">Weight:</label>
                             <input type="weight" class="form-control" id="wgt" placeholder="Enter weight" name="weight" value={inputs.weight} onChange={handleChange}/>
