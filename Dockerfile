@@ -12,6 +12,8 @@ COPY package-lock.json ./
 RUN npm install --silent
 RUN npm install react-scripts@3.4.1 -g --silent
 RUN npm i react-router-dom
+RUN npm install reactjs-popup --save
+RUN npm install --save react-toastify
 
 # add app
 COPY . ./

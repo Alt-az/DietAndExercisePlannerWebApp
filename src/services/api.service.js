@@ -5,8 +5,8 @@ class ApiDataService{
         return http.get(`nutrition?query=${weight}g ${name}`)
     }
 
-    getExercise(name){
-        return http.get(`exercises?muscle=${name}`)
+    getExercise(muscle,difficulty){
+        return http.get(`exercises?muscle=${muscle}&difficulty=${difficulty}`)
     }
 };
 

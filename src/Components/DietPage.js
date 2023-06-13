@@ -3,11 +3,13 @@ import ApiDataService from '../services/api.service'
 import { useState,useContext,useEffect} from "react";
 import ClientDataService from '../services/client.service';
 import {logContext, idContext} from '../App';
+import React from 'react';
+import 'reactjs-popup/dist/index.css';
+import { ToastContainer, toast } from 'react-toastify';
 export default function DietPage(){
     const weeks = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
     const [week,setWeek] = useState(weeks);
-    const [inputs, setInputs] = useState({});
-    
+    const [inputs, setInputs] = useState({weekday: 'Monday'});
     const [value,setValue] = useState([true]);
     const {id,setId} = useContext(idContext);
     const [meals, setMeals] = useState([]);
@@ -15,6 +17,7 @@ export default function DietPage(){
         const result = await ClientDataService.getFood(id);
         const resultdata = result.data;
         const input = [];
+        console.log(resultdata);
         resultdata.map((res) =>{
             input.push({
                 name: res.name,
@@ -71,6 +74,12 @@ export default function DietPage(){
         if(inputs.minute<=60 && inputs.hour<=24 && inputs.minute>=0 && inputs.hour>=0){
             const api = await ApiDataService.getFood(inputs.weight,inputs.name);
             const apiResult = api.data;
+            if(Object.keys(apiResult).length===0){
+                console.log("info");
+                toast.info('couldn\'t match any food', {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+            }
             meals.push({
                 name: inputs.name,
                 calories: apiResult[0].calories,
@@ -92,23 +101,34 @@ export default function DietPage(){
         return (
             <div>
                 {meals.map((meal)=>{
+                    // console.log(meals);   
                     if(meal.weekday===day){
                         return (<div className="bg-info rounded-4 border border-danger mb-2 row">
                             <div className="col-9">
                                 <p className="fw-bold">{meal.hour}:{meal.minute}<br/>name:{meal.name}<br/>calories:{meal.calories}cal<br/>weight:{meal.weight}g</p>
                             </div>
                             <div className="col-1 p-2 pr-2">
-                                <button  onClick={() => {
-                                setMeals(
-                                    meals.filter(a =>
-                                    a!==meal
-                                    )
-                                );
-                                }}>
-                                X
-                                </button>
+                            <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Do you really want to delete this meal?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={() => {setMeals(meals.filter(a =>a!==meal))}}>Yes</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">X</button>
                             </div>    
-                        </div>);
+                        </div>
+                        );
                     }
                 })}
             </div>
@@ -121,10 +141,11 @@ export default function DietPage(){
         {mealShow(day)}
     </div>);
     }
-    
+
     return (
         <div>
             <h1 className="container">Diet Plan</h1>
+            <ToastContainer />
             <div className="">
                 <div className="row container-fluid">
                     <div className="col-2 settings-block text-center">
@@ -148,14 +169,14 @@ export default function DietPage(){
                         <div class="mb-3 row">
                             <div className="col">
                                 <label for="hour" class="form-label">Hour:</label>
-                                <input type="hour" class="form-control" id="h" placeholder="Enter hour" name="hour" value={inputs.hour} onChange={handleChange}/>
+                                <input type="number" class="form-control" id="h" min={0} max={23} placeholder="Enter hour" name="hour" value={inputs.hour} onChange={handleChange}/>
                             </div>
                             <div className="col">
                                 <label for="minute" class="form-label">minute:</label>
-                                <input type="minute" class="form-control" id="m" placeholder="Enter minute" name="minute" value={inputs.minute} onChange={handleChange}/>
+                                <input type="number" class="form-control" id="m" min={0} max={59} placeholder="Enter minute" name="minute" value={inputs.minute} onChange={handleChange}/>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                     </div>
@@ -169,10 +190,10 @@ export default function DietPage(){
                     <div className="col-1">
                         <button onClick={handleSend} class="btn btn-primary m-2">Save plan</button>
                     </div>
-                    
                 </div>
                 
             </div>
         </div>
+        
     );
 }

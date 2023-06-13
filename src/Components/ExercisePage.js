@@ -3,10 +3,12 @@ import { useState,useContext,useEffect} from "react";
 import ClientDataService from '../services/client.service';
 import {logContext, idContext} from '../App';
 import ApiDataService from '../services/api.service';
+import { ToastContainer, toast } from 'react-toastify';
 export default function ExercisesPage(){
     const weeks = ['Monday', 'Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const muscles = ['abdominals','abductors','adductors','biceps','calves','chest','forearms','glutes','hamstrings','lats','lower_back','middle_back','neck','quadriceps','traps','triceps'];
     const [week,setWeek] = useState(weeks);
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({weekday: 'Monday',difficulty:"beginner",muscle:"biceps"});
     const [exercises, setExercises] = useState([]);
     const [value,setValue] = useState([true]);
     const {id,setId} = useContext(idContext);
@@ -20,6 +22,8 @@ export default function ExercisesPage(){
                 name: res.name,
                 muscle: res.muscle,
                 difficulty: res.difficulty,
+                reps: res.reps,
+                sets: res.sets,
                 weekday: res.weekday,
                 hour: res.hour,
                 minute: res.minute
@@ -42,6 +46,8 @@ export default function ExercisesPage(){
                 name: exercise.name,
                 muscle: exercise.muscle,
                 difficulty: exercise.difficulty,
+                reps: exercise.reps,
+                sets: exercise.sets,
                 weekday: exercise.weekday,
                 hour: exercise.hour,
                 minute: exercise.minute
@@ -59,6 +65,8 @@ export default function ExercisesPage(){
                 name: res.name,
                 muscle: res.muscle,
                 difficulty: res.difficulty,
+                reps: res.reps,
+                sets: res.sets,
                 weekday: res.weekday,
                 hour: res.hour,
                 minute: res.minute
@@ -69,13 +77,20 @@ export default function ExercisesPage(){
     }
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const api = await ApiDataService.getExercise(inputs.weight,inputs.muscle);
+        const api = await ApiDataService.getExercise(inputs.muscle,inputs.difficulty);
         const apiResult = api.data;
-        console.log(apiResult[0].calories);
+        if(Object.keys(apiResult).length===0){
+            console.log("info");
+            toast.info('Couldn\'t match any exercise', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
         exercises.push({
             name: apiResult[0].name,
             muscle: apiResult[0].muscle,
             difficulty: apiResult[0].difficulty,
+            reps: inputs.reps,
+            sets: inputs.sets,
             weekday: inputs.weekday,
             hour: inputs.hour,
             minute: inputs.minute
@@ -96,19 +111,28 @@ export default function ExercisesPage(){
                     if(exercise.weekday===day){
                         return (<div className="bg-info rounded-4 border border-danger mb-2 row">
                             <div className="col-9">
-                                <p className="fw-bold">{exercise.hour}:{exercise.minute}<br/>name:{exercise.name}<br/>muscle:{exercise.muscle}<br/>difficulty:{exercise.difficulty}</p>
+                                <p className="fw-bold">{exercise.hour}:{exercise.minute}<br/>name:{exercise.name}<br/>muscle:{exercise.muscle}<br/>difficulty:{exercise.difficulty}<br/>reps:{exercise.reps}x{exercise.sets}</p>
                             </div>
                             <div className="col-1 p-2 pr-2">
-                                <button  onClick={() => {
-                                setExercises(
-                                    exercises.filter(a =>
-                                    a!==exercise
-                                    )
-                                );
-                                }}>
-                                X
-                                </button>
-                            </div>    
+                            <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Do you really want to delete this exercise?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={() => {setExercises(exercises.filter(a =>a!==exercise))}}>Yes</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">X</button>
+                            </div>      
                         </div>);
                     }
                 })}
@@ -125,6 +149,7 @@ export default function ExercisesPage(){
     return (
         <div>
             <h1 className="container">Exercise Plan</h1>
+            <ToastContainer />
             <div className="">
                 <div className="row container-fluid">
                     <div className="col-2 settings-block text-center">
@@ -133,27 +158,45 @@ export default function ExercisesPage(){
                     <form onSubmit={handleSubmit}>
                         <div class="mb-3">
                             <label for="muscle" class="form-label">Muscle:</label>
-                            <input type="muscle" class="form-control" id="clr" placeholder="Enter muscle" name="muscle" value={inputs.muscle} onChange={handleChange}/>
+                            <select class="form-select form form-control" name="muscle" value={inputs.muscle} onChange={handleChange}>
+                                {muscles.map((muscle)=>{return <option>{muscle}</option>})}
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="difficulty" class="form-label">Difficulty:</label>
-                            <input type="difficulty" class="form-control" id="wgt" placeholder="Enter difficulty" name="difficulty" value={inputs.difficulty} onChange={handleChange}/>
+                            <select class="form-select form form-control" name="difficulty" value={inputs.difficulty} onChange={handleChange}>
+                                <option>beginner</option>
+                                <option>intermediate</option>
+                                <option>expert</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="weekday" class="form-label">Weekday:</label>
-                            <input type="weekday" class="form-control" id="wd" placeholder="Enter weekday" name="weekday" value={inputs.weekday} onChange={handleChange}/>
+                            <select class="form-select form form-control" name="weekday" value={inputs.weekday} onChange={handleChange}>
+                                {weeks.map((day)=>{return <option>{day}</option>})}
+                            </select>
+                        </div>
+                        <div class="mb-3 row">
+                            <div className="col">
+                                <label for="reps" class="form-label">Reps:</label>
+                                <input type="number" class="form-control" id="r" min={0} placeholder="Enter reps" name="reps" value={inputs.reps} onChange={handleChange}/>
+                            </div>
+                            <div className="col">
+                                <label for="minute" class="form-label">Sets:</label>
+                                <input type="number" class="form-control" id="s" min={0} placeholder="Enter sets" name="sets" value={inputs.sets} onChange={handleChange}/>
+                            </div>
                         </div>
                         <div class="mb-3 row">
                             <div className="col">
                                 <label for="hour" class="form-label">Hour:</label>
-                                <input type="hour" class="form-control" id="h" placeholder="Enter hour" name="hour" value={inputs.hour} onChange={handleChange}/>
+                                <input type="number" class="form-control" id="h" min={0} max={23} placeholder="Enter hour" name="hour" value={inputs.hour} onChange={handleChange}/>
                             </div>
                             <div className="col">
                                 <label for="minute" class="form-label">Minute:</label>
-                                <input type="minute" class="form-control" id="m" placeholder="Enter minute" name="minute" value={inputs.minute} onChange={handleChange}/>
+                                <input type="number" class="form-control" id="m" min={0} max={59} placeholder="Enter minute" name="minute" value={inputs.minute} onChange={handleChange}/>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
                     </div>
